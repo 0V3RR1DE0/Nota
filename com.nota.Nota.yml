@@ -1,0 +1,31 @@
+app-id: com.nota.Nota
+runtime: org.freedesktop.Platform
+runtime-version: '23.08'
+sdk: org.freedesktop.Sdk
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.rust-stable
+command: nota
+
+finish-args:
+  - --share=network           # for update checks
+  - --share=ipc
+  - --socket=wayland
+  - --socket=fallback-x11
+  - --filesystem=home         # for opening attached files
+  - --filesystem=xdg-data     # for data storage
+
+modules:
+  - name: nota
+    buildsystem: simple
+    build-options:
+      append-path: /usr/lib/sdk/rust-stable/bin
+    build-commands:
+      - cargo build --release --offline
+      - install -Dm755 target/release/Nota /app/bin/nota
+      - install -Dm644 assets/icon.svg /app/share/icons/hicolor/scalable/apps/com.nota.Nota.svg
+      - install -Dm644 com.nota.Nota.desktop /app share/applications/com.nota.Nota.desktop
+    sources:
+      - type: dir
+        path: .
+      - type: file
+        path: cargo-sources.json  # generated with flatpak-cargo-generator

@@ -1,0 +1,18 @@
+[package]
+name    = "notaupdater"
+version = "0.1.0"
+edition = "2024"
+
+[[bin]]
+name = "NotaUpdater"
+path = "src/main.rs"
+
+[dependencies]
+zip        = "8.6.0"
+reqwest    = { version = "0.13.4", features = ["blocking"] }
+
+[target.'cfg(target_os = "windows")'.dependencies]
+windows-sys = { version = "0.61.2", features = [
+    "Win32_Foundation",
+    "Win32_System_Threading",
+] }
